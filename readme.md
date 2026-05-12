@@ -1,122 +1,122 @@
-# 0/1 Knapsack Problem Solver - Program Flow
+# Řešitel problému batohu 0/1 - Běh programu
 
-## 📋 Overview
-This program solves the **0/1 Knapsack Problem** using a **recursive backtracking algorithm**. It finds the optimal combination of packages that maximizes value while staying within a weight limit.
+## 📋 Přehled
+Program řeší **problém batohu 0/1** pomocí **rekurzivního algoritmu s návratem (backtracking)**. Najde nejlepší kombinaci balíků, která maximalizuje hodnotu a nepřekročí váhový limit.
 
 ---
 
-## 📊 Algorithm Flow Diagram
+## 📊 Schéma běhu algoritmu
 
 ```mermaid
 graph TD
-    A["🔴 START<br/>Initialize variables"] --> B["Call najdi_nejlepsi<br/>index=0, weight=0, value=0"]
-    B --> C{"Does current<br/>weight exceed<br/>limit?"}
-    C -->|Yes| D["❌ PRUNE<br/>Return immediately<br/>Skip this branch"]
-    C -->|No| E{"Reached end<br/>of packages?<br/>index == len?"}
-    E -->|Yes| F{"Is current value<br/>better than best?"}
-    F -->|Yes| G["✅ UPDATE<br/>Save as best solution"]
-    F -->|No| H["Keep previous best"]
-    G --> I["🔙 RETURN<br/>Backtrack"]
+    A["🔴 START<br/>Inicializace proměnných"] --> B["Volání najdi_nejlepsi<br/>index=0, váha=0, hodnota=0"]
+    B --> C{"Překročila aktuální<br/>váha limit?"}
+    C -->|Ano| D["❌ PROŘEZÁNÍ<br/>Okamžitý návrat<br/>Přeskočit tuto cestu"]
+    C -->|Ne| E{"Dosáhli jsme<br/>konce balíků?<br/>index == délka?"}
+    E -->|Ano| F{"Je aktuální hodnota<br/>lepší než dosavadní?"}
+    F -->|Ano| G["✅ AKTUALIZACE<br/>Uložit jako nejlepší řešení"]
+    F -->|Ne| H["Zachovat dosavadní nejlepší"]
+    G --> I["🔙 NÁVRAT<br/>Jít zpět"]
     H --> I
-    E -->|No| J["Get package at<br/>current index"]
-    J --> K["Option 1: SKIP<br/>Recursively call:<br/>index+1"]
-    K --> L["Option 2: TAKE<br/>Add package"]
-    L --> M["Recursively call:<br/>index+1, weight+w, value+v"]
-    M --> N["REMOVE package<br/>from selection"]
+    E -->|Ne| J["Vezmi balík<br/>na aktuální pozici"]
+    J --> K["Možnost 1: VYNECHAT<br/>Rekurzivní volání:<br/>index+1"]
+    K --> L["Možnost 2: VZÍT<br/>Přidej balík"]
+    L --> M["Rekurzivní volání:<br/>index+1, váha+w, hodnota+v"]
+    M --> N["ODEBER balík<br/>ze vzoru"]
     N --> I
-    I --> O{"All branches<br/>explored?"}
-    O -->|No| K
-    O -->|Yes| P["🟢 END<br/>Display results"]
+    I --> O{"Zůstaly ještě<br/>cesty k prozkoumání?"}
+    O -->|Ne| K
+    O -->|Ano| P["🟢 KONEC<br/>Zobrazit výsledky"]
 ```
 
 ---
 
-## 🎯 Step-by-Step Execution
+## 🎯 Postupný běh
 
-### Initial Setup
-- **Packages**: 7 items (A-G) with weight and value
-- **Weight Limit**: 120 kg
-- **Goal**: Maximize total value
+### Počáteční nastavení
+- **Balíky**: 7 položek (A-G) s váhou a hodnotou
+- **Limit váhy**: 120 kg
+- **Cíl**: Maximalizovat celkovou hodnotu
 
-| Package | Weight (kg) | Value (Kč) |
-|---------|------------|-----------|
-| A       | 40         | 900       |
-| B       | 30         | 700       |
-| C       | 50         | 1200      |
-| D       | 20         | 400       |
-| E       | 10         | 200       |
-| F       | 25         | 500       |
-| G       | 35         | 800       |
+| Balík | Váha (kg) | Hodnota (Kč) |
+|-------|-----------|-------------|
+| A     | 40        | 900         |
+| B     | 30        | 700         |
+| C     | 50        | 1200        |
+| D     | 20        | 400         |
+| E     | 10        | 200         |
+| F     | 25        | 500         |
+| G     | 35        | 800         |
 
-### Recursive Function: `najdi_nejlepsi()`
+### Rekurzivní funkce: `najdi_nejlepsi()`
 
-**Parameters:**
-- `index`: Current package being considered (0 to len(packages))
-- `aktualni_vaha`: Current total weight in knapsack
-- `aktualni_hodnota`: Current total value in knapsack
-- `vybrany_vyber`: List of selected packages
+**Parametry:**
+- `index`: Aktuálně zvažovaný balík (0 až délka seznamu)
+- `aktualni_vaha`: Aktuální celková váha v batohu
+- `aktualni_hodnota`: Aktuální celková hodnota v batohu
+- `vybrany_vyber`: Seznam vybraných balíků
 
-**Algorithm Logic:**
+**Logika algoritmu:**
 
-1. **Pruning Check**: If weight exceeds 120 kg → return (don't explore this branch)
-2. **Base Case**: If we've considered all packages → update best solution if better
-3. **Recursive Case**: For each package, try two options:
-   - **Option 1 (Skip)**: Move to next package without taking it
-   - **Option 2 (Take)**: Add package to knapsack and move to next
-   - **Backtrack**: Remove the package after exploring the "take" branch
+1. **Kontrola prořezání**: Pokud váha překročí 120 kg → návrat (neprohledávej tuto cestu)
+2. **Základní případ**: Pokud jsme zpracovali všechny balíky → aktualizuj nejlepší řešení, pokud je lepší
+3. **Rekurzivní případ**: Pro každý balík zkus dvě možnosti:
+   - **Možnost 1 (Vynechat)**: Jdi na další balík bez jeho brání
+   - **Možnost 2 (Vzít)**: Přidej balík do batohu a jdi dál
+   - **Návrat**: Odeber balík poté, co jsi prozkoumala cestu "vzít"
 
 ---
 
-## 🔄 Example Execution Tree (Simplified)
+## 🔄 Příklad stromu provádění (zjednodušeno)
 
 ```
-Level 0: Start (0 items considered)
-├─ Package A not taken → Level 1
-│  └─ Package B not taken → Level 2
-│     └─ ... explores all remaining combinations
+Úroveň 0: Start (0 balíků zváženo)
+├─ Balík A se nebere → Úroveň 1
+│  └─ Balík B se nebere → Úroveň 2
+│     └─ ... zkoumání všech zbývajících kombinací
 │
-└─ Package A taken (weight: 40, value: 900) → Level 1
-   ├─ Package B not taken → Level 2
-   └─ Package B taken (weight: 70, value: 1600) → Level 2
-      └─ ... continues exploring combinations
+└─ Balík A se vezme (váha: 40, hodnota: 900) → Úroveň 1
+   ├─ Balík B se nebere → Úroveň 2
+   └─ Balík B se vezme (váha: 70, hodnota: 1600) → Úroveň 2
+      └─ ... pokračování zkoumání kombinací
 ```
 
 ---
 
-## ⏱️ Output Example
+## ⏱️ Příklad výstupu
 
 ```
-Time: X.XXX ms
-OPTIMAL LOAD
+Čas výpočtu: X.XXX ms
+OPTIMÁLNÍ NÁKLAD
 ------------------------
-Selected packages:
-Package C  (50 kg, 1200 Kč)
-Package A  (40 kg, 900 Kč)
-Package B  (30 kg, 700 Kč)
+Vybrané balíky:
+Balík C  (50 kg, 1200 Kč)
+Balík A  (40 kg, 900 Kč)
+Balík B  (30 kg, 700 Kč)
 ------------------------
-Total weight: 120 kg
-Total value: 2800 Kč
+Celková váha: 120 kg
+Celková hodnota: 2800 Kč
 ```
 
 ---
 
-## 🎓 Key Concepts
+## 🎓 Klíčové pojmy
 
-| Concept | Explanation |
-|---------|------------|
-| **Backtracking** | Explores all possible combinations by branching and pruning invalid paths |
-| **Pruning** | Early termination if weight limit is exceeded (optimization) |
-| **Global Variables** | Tracks best value and best selection across all recursive calls |
-| **Time Complexity** | O(2^n) where n = number of packages (explores all combinations) |
-| **Space Complexity** | O(n) for recursion stack depth |
+| Pojem | Vysvětlení |
+|-------|-----------|
+| **Návraty (Backtracking)** | Zkoumá všechny možné kombinace větvením a prořezáváním neplatných cest |
+| **Prořezání (Pruning)** | Brzké ukončení, pokud je překročen limit váhy (optimalizace) |
+| **Globální proměnné** | Sledují nejlepší hodnotu a nejlepší výběr na všech úrovních rekurze |
+| **Časová složitost** | O(2^n) kde n = počet balíků (zkoumá všechny kombinace) |
+| **Prostorová složitost** | O(n) pro hloubku zásobníku rekurze |
 
 ---
 
-## 📈 Why This Algorithm?
+## 📈 Proč tento algoritmus?
 
-- ✅ **Guarantees optimal solution** (tries all valid combinations)
-- ✅ **Prunes branches** to avoid exploring invalid paths
-- ✅ **Works for 0/1 constraint** (each item either taken or not)
-- ⚠️ **Can be slow** for large datasets (exponential time complexity)
+- ✅ **Zaručuje optimální řešení** (zkoušuje všechny platné kombinace)
+- ✅ **Prořezává větve** pro vyhnutí se prozkoumávání neplatných cest
+- ✅ **Funguje pro omezení 0/1** (každá položka se buď vezme, nebo ne)
+- ⚠️ **Může být pomalý** pro velké datové sady (exponenciální časová složitost)
 
-*For production use with 20+ items, consider **Dynamic Programming** approach instead.*
+*Pro produkční použití s 20+ balíky zvažte místo toho přístup **Dynamického programování**.*
