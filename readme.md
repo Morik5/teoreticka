@@ -4,24 +4,17 @@
 
 ```mermaid
 graph TD
-    A["🔴 START<br/>Inicializace proměnných"] --> B["Volání najdi_nejlepsi<br/>index=0, váha=0, hodnota=0"]
-    B --> C{"Překročila aktuální<br/>váha limit?"}
-    C -->|Ano| D["❌ Odříznutí větve<br/>Okamžitý návrat<br/>Přeskočit tuto cestu"]
-    C -->|Ne| E{"Dosáhli jsme<br/>konce balíků?<br/>index == délka?"}
-    E -->|Ano| F{"Je aktuální hodnota<br/>lepší než dosavadní?"}
-    F -->|Ano| G["✅ AKTUALIZACE<br/>Uložit jako nejlepší řešení"]
-    F -->|Ne| H["Zachovat dosavadní nejlepší"]
-    G --> I["🔙 NÁVRAT<br/>Jít zpět"]
-    H --> I
-    E -->|Ne| J["Vezmi balík<br/>na aktuální pozici"]
-    J --> K["Možnost 1: VYNECHAT<br/>Rekurzivní volání:<br/>index+1"]
-    K --> L["Možnost 2: VZÍT<br/>Přidej balík"]
-    L --> M["Rekurzivní volání:<br/>index+1, váha+w, hodnota+v"]
-    M --> N["ODEBER balík<br/>ze vzoru"]
-    N --> I
-    I --> O{"Zůstaly ještě<br/>cesty k prozkoumání?"}
-    O -->|Ne| K
-    O -->|Ano| P["🟢 KONEC<br/>Zobrazit výsledky"]
+   A["🔴 START<br/>najdi_nejlepsi(0, 0, 0, [])"] --> B{"Překročila aktuální<br/>váha limit?"}
+   B -->|Ano| C["❌ Odříznutí větve<br/>Okamžitý návrat"]
+   B -->|Ne| D{"index == délka balíků?"}
+   D -->|Ano| E{"Je aktuální hodnota<br/>lepší než dosavadní?"}
+   E -->|Ano| F["✅ AKTUALIZACE<br/>Uložit jako nejlepší řešení"]
+   E -->|Ne| G["🔙 NÁVRAT"]
+   F --> G
+   D -->|Ne| H["Možnost 1: VYNECHAT balík<br/>rekurzivní volání index+1"]
+   H --> I["Možnost 2: VZÍT balík<br/>append + rekurzivní volání"]
+   I --> J["Po návratu odebrat balík<br/>pop()"]
+   J --> G
 ```
 
 ---
